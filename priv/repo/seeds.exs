@@ -9,3 +9,26 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+%{id: presentation_id} =
+  Feelis.Repo.insert!(%Feelis.Presentations.Presentation{
+    title: "Very first presentation",
+    inserted_at: ~N[2000-01-01 23:00:07],
+    updated_at: ~N[2000-01-01 23:00:07]
+  })
+
+Feelis.Repo.insert!(%Feelis.Presentations.Slide{
+  title: "Slide 1",
+  description: "Please write your answer now",
+  presentation_id: presentation_id,
+  inserted_at: ~N[2000-01-01 23:00:07],
+  updated_at: ~N[2000-01-01 23:00:07]
+})
+
+Feelis.Repo.insert!(%Feelis.Presentations.Slide{
+  title: "Slide 2",
+  description: "Do it now!",
+  presentation_id: presentation_id,
+  inserted_at: ~N[2000-01-01 23:00:07],
+  updated_at: ~N[2000-01-01 23:00:07]
+})

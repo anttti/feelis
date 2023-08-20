@@ -1,0 +1,41 @@
+<.header>
+  Listing Presentations
+  <:actions>
+    <.link patch={~p"/presentations/new"}>
+      <.button>New Presentation</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="presentations"
+  rows={@streams.presentations}
+  row_click={fn {_id, presentation} -> JS.navigate(~p"/presentations/#{presentation}") end}
+>
+  <:col :let={{_id, presentation}} label="Title"><%= presentation.title %></:col>
+  <:action :let={{_id, presentation}}>
+    <div class="sr-only">
+      <.link navigate={~p"/presentations/#{presentation}"}>Show</.link>
+    </div>
+    <.link patch={~p"/presentations/#{presentation}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, presentation}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: presentation.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="presentation-modal" show on_cancel={JS.patch(~p"/presentations")}>
+  <.live_component
+    module={FeelisWeb.PresentationLive.FormComponent}
+    id={@presentation.id || :new}
+    title={@page_title}
+    action={@live_action}
+    presentation={@presentation}
+    patch={~p"/presentations"}
+  />
+</.modal>

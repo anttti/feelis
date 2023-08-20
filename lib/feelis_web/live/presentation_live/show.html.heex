@@ -1,0 +1,26 @@
+<.header>
+  Presentation <%= @presentation.id %>
+  <:subtitle>This is a presentation record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/presentations/#{@presentation}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit presentation</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Title"><%= @presentation.title %></:item>
+</.list>
+
+<.back navigate={~p"/presentations"}>Back to presentations</.back>
+
+<.modal :if={@live_action == :edit} id="presentation-modal" show on_cancel={JS.patch(~p"/presentations/#{@presentation}")}>
+  <.live_component
+    module={FeelisWeb.PresentationLive.FormComponent}
+    id={@presentation.id}
+    title={@page_title}
+    action={@live_action}
+    presentation={@presentation}
+    patch={~p"/presentations/#{@presentation}"}
+  />
+</.modal>
