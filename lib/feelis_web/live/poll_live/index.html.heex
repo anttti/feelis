@@ -1,0 +1,6 @@
+<div phx-hook="setSession" id="poll">
+  <h2>Users online:</h2>
+  <%= for {_, user} <- @users do %>
+    <span class="text-xs bg-blue-200 rounded px-2 py-1"><%= user[:name] %></span>
+  <% end %>
+</div>
