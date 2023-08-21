@@ -4,6 +4,7 @@ defmodule Feelis.Presentations.Presentation do
 
   schema "presentations" do
     field :title, :string
+    has_many :slides, Feelis.Presentations.Slide
 
     timestamps()
   end

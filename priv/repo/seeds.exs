@@ -25,10 +25,35 @@ Feelis.Repo.insert!(%Feelis.Presentations.Slide{
   updated_at: ~N[2000-01-01 23:00:07]
 })
 
-Feelis.Repo.insert!(%Feelis.Presentations.Slide{
-  title: "Slide 2",
-  description: "Do it now!",
-  presentation_id: presentation_id,
+%{id: slide_id} =
+  Feelis.Repo.insert!(%Feelis.Presentations.Slide{
+    title: "Slide 2",
+    description: "Do it now!",
+    presentation_id: presentation_id,
+    inserted_at: ~N[2000-01-01 23:00:07],
+    updated_at: ~N[2000-01-01 23:00:07]
+  })
+
+Feelis.Repo.insert!(%Feelis.Presentations.Answer{
+  slide_id: slide_id,
+  answer: "Yep",
+  user_id: "1234",
+  inserted_at: ~N[2000-01-01 23:00:07],
+  updated_at: ~N[2000-01-01 23:00:07]
+})
+
+Feelis.Repo.insert!(%Feelis.Presentations.Answer{
+  slide_id: slide_id,
+  answer: "Nope",
+  user_id: "1234",
+  inserted_at: ~N[2000-01-01 23:00:07],
+  updated_at: ~N[2000-01-01 23:00:07]
+})
+
+Feelis.Repo.insert!(%Feelis.Presentations.Answer{
+  slide_id: slide_id,
+  answer: "Unsure",
+  user_id: "1234",
   inserted_at: ~N[2000-01-01 23:00:07],
   updated_at: ~N[2000-01-01 23:00:07]
 })

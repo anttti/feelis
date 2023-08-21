@@ -6,6 +6,7 @@ defmodule Feelis.Presentations.Slide do
     field :description, :string
     field :title, :string
     belongs_to :presentation, Feelis.Presentations.Presentation
+    has_many :answers, Feelis.Presentations.Answer
 
     timestamps()
   end

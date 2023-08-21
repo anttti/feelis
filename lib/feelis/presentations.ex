@@ -35,7 +35,7 @@ defmodule Feelis.Presentations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_presentation!(id), do: Repo.get!(Presentation, id)
+  def get_presentation!(id), do: Repo.get!(Presentation, id) |> Repo.preload(:slides)
 
   @doc """
   Creates a presentation.
@@ -132,7 +132,7 @@ defmodule Feelis.Presentations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_slide!(id), do: Repo.get!(Slide, id)
+  def get_slide!(id), do: Repo.get!(Slide, id) |> Repo.preload(:answers)
 
   @doc """
   Creates a slide.
