@@ -1,6 +1,5 @@
 # TODO
 
-- Show the same slide to all participants
 - Record answers per slide
 - Render answers to the host
 - Support open questions

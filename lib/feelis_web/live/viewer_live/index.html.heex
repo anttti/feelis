@@ -1,0 +1,12 @@
+<.header>
+  <%= @presentation.title %>
+</.header>
+
+<%= if @current_slide do %>
+  <h1>
+    <%= @current_slide.title %>
+  </h1>
+  <p>
+    <%= @current_slide.description %>
+  </p>
+<% end %>

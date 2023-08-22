@@ -40,6 +40,7 @@ defmodule FeelisWeb.Router do
     live "/presentations/:id/show/edit", PresentationLive.Show, :edit
 
     live "/p/:id", PresentLive.Index, :index
+    live "/v/:id", ViewerLive.Index, :index
   end
 
   # Other scopes may use custom stacks.

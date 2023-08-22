@@ -7,6 +7,7 @@ defmodule FeelisWeb.PresentLive.Index do
 
   @presence "poll:presence"
   @page_turn_topic "topic:page_turn"
+  @join_topic "topic:join"
 
   @impl true
   def mount(_params, session, socket) do
@@ -25,6 +26,7 @@ defmodule FeelisWeb.PresentLive.Index do
 
       Phoenix.PubSub.subscribe(PubSub, @presence)
       FeelisWeb.Endpoint.subscribe(@page_turn_topic)
+      FeelisWeb.Endpoint.subscribe(@join_topic)
     end
 
     {:ok, socket |> assign(:users, %{}) |> handle_joins(Presence.list(@presence))}
@@ -44,18 +46,13 @@ defmodule FeelisWeb.PresentLive.Index do
 
   @impl true
   def handle_info(%Phoenix.Socket.Broadcast{event: "presence_diff", payload: diff}, socket) do
-    {
-      :noreply,
-      socket
-      |> handle_leaves(diff.leaves)
-      |> handle_joins(diff.joins)
-    }
+    {:noreply, socket |> handle_leaves(diff.leaves) |> handle_joins(diff.joins)}
   end
 
   @impl true
-  def handle_info(%{topic: @page_turn_topic, payload: state}, socket) do
-    IO.puts("THIS IS THE EVENT")
-    IO.inspect(state)
+  def handle_info(%{topic: @join_topic, payload: state}, socket) do
+    # Send current state to the requester
+    GenServer.cast(state.pid, {:sync, socket.assigns.current_slide})
     {:noreply, socket}
   end
 
@@ -81,15 +78,11 @@ defmodule FeelisWeb.PresentLive.Index do
 
       # Broadcasts the event to ALL OTHER SUBSCRIBERS THAN THE ONE THAT SENDS IT
       FeelisWeb.Endpoint.broadcast_from(self(), @page_turn_topic, "set_slide", %{
-        id: next_slide.id,
-        title: next_slide.title,
-        description: next_slide.description
+        current_slide: next_slide
       })
 
       {:noreply,
-       socket
-       |> assign(:current_index, next_index)
-       |> assign(:current_slide, next_slide)}
+       socket |> assign(:current_index, next_index) |> assign(:current_slide, next_slide)}
     else
       {:noreply, socket}
     end
@@ -104,15 +97,11 @@ defmodule FeelisWeb.PresentLive.Index do
 
       # Broadcasts the event to ALL OTHER SUBSCRIBERS THAN THE ONE THAT SENDS IT
       FeelisWeb.Endpoint.broadcast_from(self(), @page_turn_topic, "set_slide", %{
-        id: next_slide.id,
-        title: next_slide.title,
-        description: next_slide.description
+        current_slide: next_slide
       })
 
       {:noreply,
-       socket
-       |> assign(:current_index, next_index)
-       |> assign(:current_slide, Enum.at(socket.assigns.presentation.slides, next_index))}
+       socket |> assign(:current_index, next_index) |> assign(:current_slide, next_slide)}
     else
       {:noreply, socket}
     end
