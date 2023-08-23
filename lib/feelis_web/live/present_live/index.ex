@@ -4,10 +4,12 @@ defmodule FeelisWeb.PresentLive.Index do
   alias Feelis.Presentations
   alias Feelis.Presence
   alias Feelis.PubSub
+  alias FeelisWeb.Endpoint
 
   @presence "poll:presence"
   @page_turn_topic "topic:page_turn"
   @join_topic "topic:join"
+  @answers_topic "topic:answers"
 
   @impl true
   def mount(_params, session, socket) do
@@ -25,8 +27,8 @@ defmodule FeelisWeb.PresentLive.Index do
       end
 
       Phoenix.PubSub.subscribe(PubSub, @presence)
-      FeelisWeb.Endpoint.subscribe(@page_turn_topic)
-      FeelisWeb.Endpoint.subscribe(@join_topic)
+      Endpoint.subscribe(@join_topic)
+      Endpoint.subscribe(@answers_topic)
     end
 
     {:ok, socket |> assign(:users, %{}) |> handle_joins(Presence.list(@presence))}
@@ -41,7 +43,8 @@ defmodule FeelisWeb.PresentLive.Index do
      socket
      |> assign(:presentation, presentation)
      |> assign(:current_slide, slide)
-     |> assign(:current_index, 0)}
+     |> assign(:current_index, 0)
+     |> assign(:answers, [])}
   end
 
   @impl true
@@ -54,6 +57,12 @@ defmodule FeelisWeb.PresentLive.Index do
     # Send current state to the requester
     GenServer.cast(state.pid, {:sync, socket.assigns.current_slide})
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{topic: @answers_topic, payload: state}, socket) do
+    answers = socket.assigns.answers ++ [state.answer]
+    {:noreply, socket |> assign(:answers, answers)}
   end
 
   @impl true
@@ -77,7 +86,7 @@ defmodule FeelisWeb.PresentLive.Index do
       next_slide = Enum.at(socket.assigns.presentation.slides, next_index)
 
       # Broadcasts the event to ALL OTHER SUBSCRIBERS THAN THE ONE THAT SENDS IT
-      FeelisWeb.Endpoint.broadcast_from(self(), @page_turn_topic, "set_slide", %{
+      Endpoint.broadcast_from(self(), @page_turn_topic, "set_slide", %{
         current_slide: next_slide
       })
 
@@ -96,7 +105,7 @@ defmodule FeelisWeb.PresentLive.Index do
       next_slide = Enum.at(socket.assigns.presentation.slides, next_index)
 
       # Broadcasts the event to ALL OTHER SUBSCRIBERS THAN THE ONE THAT SENDS IT
-      FeelisWeb.Endpoint.broadcast_from(self(), @page_turn_topic, "set_slide", %{
+      Endpoint.broadcast_from(self(), @page_turn_topic, "set_slide", %{
         current_slide: next_slide
       })
 

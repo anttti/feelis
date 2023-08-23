@@ -11,3 +11,9 @@
 <p>
   <%= @current_slide.description %>
 </p>
+
+<ul>
+  <%= for a <- @answers do %>
+    <li><%= a.answer %></li>
+  <% end %>
+</ul>
