@@ -17,9 +17,7 @@ defmodule FeelisWeb.ViewerLive.Index do
       FeelisWeb.Endpoint.broadcast_from(self(), @join_topic, "join", %{pid: self()})
     end
 
-    changeset = Presentations.change_answer(%Answer{})
-
-    {:ok, socket |> assign(:answer, %Answer{}) |> assign_form(changeset)}
+    {:ok, socket |> assign(:answer, %Answer{}) |> reset_form()}
   end
 
   @impl true
@@ -61,11 +59,18 @@ defmodule FeelisWeb.ViewerLive.Index do
 
         {:noreply,
          socket
+         |> assign(:current_slide, nil)
+         |> reset_form()
          |> put_flash(:info, "Answer created successfully")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
     end
+  end
+
+  defp reset_form(socket) do
+    changeset = Presentations.change_answer(%Answer{})
+    assign_form(socket, changeset)
   end
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do

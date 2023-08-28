@@ -1,7 +1,5 @@
 # TODO
 
-- Load existing answers from the DB
-- Show "waiting for host" -screen after entering an answer
 - Support open questions
 - Support multiselect questions
 - Support single select questions
