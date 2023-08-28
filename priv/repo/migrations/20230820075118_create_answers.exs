@@ -5,7 +5,7 @@ defmodule Feelis.Repo.Migrations.CreateAnswers do
     create table(:answers) do
       add :answer, :string, null: false
       add :user_id, :string, null: false
-      add :slide_id, references(:slides, on_delete: :nothing)
+      add :slide_id, references(:slides, on_delete: :nothing), null: false
 
       timestamps()
     end
