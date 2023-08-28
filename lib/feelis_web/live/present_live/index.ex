@@ -39,6 +39,10 @@ defmodule FeelisWeb.PresentLive.Index do
     presentation = Presentations.get_presentation!(id)
     slide = Enum.at(presentation.slides, 0)
 
+    Endpoint.broadcast_from(self(), @page_turn_topic, "set_slide", %{
+      current_slide: slide
+    })
+
     {:noreply,
      socket
      |> assign(:presentation, presentation)
