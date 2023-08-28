@@ -43,8 +43,7 @@ defmodule FeelisWeb.PresentLive.Index do
      socket
      |> assign(:presentation, presentation)
      |> assign(:current_slide, slide)
-     |> assign(:current_index, 0)
-     |> assign(:answers, [])}
+     |> assign(:current_index, 0)}
   end
 
   @impl true
@@ -60,9 +59,9 @@ defmodule FeelisWeb.PresentLive.Index do
   end
 
   @impl true
-  def handle_info(%{topic: @answers_topic, payload: state}, socket) do
-    answers = socket.assigns.answers ++ [state.answer]
-    {:noreply, socket |> assign(:answers, answers)}
+  def handle_info(%{topic: @answers_topic, payload: _state}, socket) do
+    slide = Presentations.get_slide!(socket.assigns.current_slide.id)
+    {:noreply, socket |> assign(:current_slide, slide)}
   end
 
   @impl true

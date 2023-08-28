@@ -13,7 +13,7 @@ defmodule Feelis.Presentations.Answer do
   @doc false
   def changeset(answer, attrs) do
     answer
-    |> cast(attrs, [:answer, :user_id])
-    |> validate_required([:answer, :user_id])
+    |> cast(attrs, [:answer, :user_id, :slide_id])
+    |> validate_required([:answer, :user_id, :slide_id])
   end
 end

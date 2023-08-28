@@ -53,6 +53,8 @@ defmodule FeelisWeb.ViewerLive.Index do
   end
 
   def handle_event("save", %{"answer" => answer_params}, socket) do
+    answer_params = Map.put(answer_params, "slide_id", socket.assigns.current_slide.id)
+
     case Presentations.create_answer(answer_params) do
       {:ok, answer} ->
         FeelisWeb.Endpoint.broadcast_from(self(), @answers_topic, "answer", %{answer: answer})

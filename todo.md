@@ -2,7 +2,6 @@
 
 - Load existing answers from the DB
 - Show "waiting for host" -screen after entering an answer
-- Render answers to the host
 - Support open questions
 - Support multiselect questions
 - Support single select questions
@@ -13,3 +12,5 @@
 - Authoring UI for presentations
 - Support uploadable images
 - Create a topic per presentation
+- Create a slug per presentation
+- Allow connecting to presentation even if the host is not present ("Waiting for host")

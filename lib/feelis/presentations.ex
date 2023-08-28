@@ -35,7 +35,7 @@ defmodule Feelis.Presentations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_presentation!(id), do: Repo.get!(Presentation, id) |> Repo.preload(:slides)
+  def get_presentation!(id), do: Repo.get!(Presentation, id) |> Repo.preload(slides: :answers)
 
   @doc """
   Creates a presentation.
