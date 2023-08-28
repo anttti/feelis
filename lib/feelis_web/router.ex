@@ -21,18 +21,6 @@ defmodule FeelisWeb.Router do
     get "/", PageController, :home
     live "/poll", PollLive.Index, :index
 
-    live "/answers", AnswerLive.Index, :index
-    live "/answers/new", AnswerLive.Index, :new
-    live "/answers/:id/edit", AnswerLive.Index, :edit
-    live "/answers/:id", AnswerLive.Show, :show
-    live "/answers/:id/show/edit", AnswerLive.Show, :edit
-
-    live "/slides", SlideLive.Index, :index
-    live "/slides/new", SlideLive.Index, :new
-    live "/slides/:id/edit", SlideLive.Index, :edit
-    live "/slides/:id", SlideLive.Show, :show
-    live "/slides/:id/show/edit", SlideLive.Show, :edit
-
     live "/presentations", PresentationLive.Index, :index
     live "/presentations/new", PresentationLive.Index, :new
     live "/presentations/:id/edit", PresentationLive.Index, :edit
