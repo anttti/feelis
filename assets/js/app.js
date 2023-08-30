@@ -27,10 +27,8 @@ hooks.setSession = {
   mounted() {
     if (document.cookie) {
       const id = document.cookie.split("=")[1];
-      console.log("cookie", id);
       return;
     }
-    console.log("no cookie", document.cookie);
     const id = Math.round(Math.random() * 999999);
     fetch(`/api/session?user_id=${id}`, { method: "post" });
     document.cookie = `user_id=${id}`;

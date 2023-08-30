@@ -1,37 +1,21 @@
 defmodule FeelisWeb.PresentLive.Index do
-  use FeelisWeb, :live_view
+  use FeelisWeb, :presentation_live_view
 
   alias Feelis.Presentations
-  alias Feelis.Presence
-  alias Feelis.PubSub
   alias FeelisWeb.Endpoint
 
-  @presence "poll:presence"
   @page_turn_topic "topic:page_turn"
   @join_topic "topic:join"
   @answers_topic "topic:answers"
 
   @impl true
-  def mount(_params, session, socket) do
+  def mount(_params, _session, socket) do
     if connected?(socket) do
-      id = session["user_id"]
-
-      if id do
-        IO.puts("Got existing ID: #{id}")
-
-        {:ok, _} =
-          Presence.track(self(), @presence, id, %{
-            name: "User #{id}",
-            joined_at: :os.system_time(:seconds)
-          })
-      end
-
-      Phoenix.PubSub.subscribe(PubSub, @presence)
       Endpoint.subscribe(@join_topic)
       Endpoint.subscribe(@answers_topic)
     end
 
-    {:ok, socket |> assign(:users, %{}) |> handle_joins(Presence.list(@presence))}
+    {:ok, socket |> assign(:users, %{})}
   end
 
   @impl true
@@ -66,19 +50,6 @@ defmodule FeelisWeb.PresentLive.Index do
   def handle_info(%{topic: @answers_topic, payload: _state}, socket) do
     slide = Presentations.get_slide!(socket.assigns.current_slide.id)
     {:noreply, socket |> assign(:current_slide, slide)}
-  end
-
-  @impl true
-  def handle_event("new-user-id", %{"id" => id}, socket) do
-    IO.puts("Got new ID: #{id}")
-
-    {:ok, _} =
-      Presence.track(self(), @presence, id, %{
-        name: "User #{id}",
-        joined_at: :os.system_time(:seconds)
-      })
-
-    {:noreply, socket}
   end
 
   @impl true
