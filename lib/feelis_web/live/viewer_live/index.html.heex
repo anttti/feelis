@@ -1,23 +1,25 @@
-<.header>
-  <%= @presentation.title %>
-</.header>
-
-<div phx-hook="setSession" id="register"></div>
-
-<%= if @current_slide do %>
-  <h1>
-    <%= @current_slide.title %>
+<header class="p-4 bg-gray-900 text-white">
+  <h1 class="text-lg font-bold text-center">
+    <%= @presentation.title %>
   </h1>
-  <p>
-    <%= @current_slide.description %>
-  </p>
+</header>
 
-  <.simple_form for={@form} id="answer-form" phx-change="validate" phx-submit="save">
-    <.input field={@form[:answer]} type="text" label="Answer" />
-    <:actions>
-      <.button phx-disable-with="Saving...">Send</.button>
-    </:actions>
-  </.simple_form>
-<% else %>
-  <h1>Waiting for host...</h1>
-<% end %>
+<div phx-hook="setSession" id="register" class="p-4">
+  <%= if @current_slide do %>
+    <h1>
+      <%= @current_slide.title %>
+    </h1>
+    <p>
+      <%= @current_slide.description %>
+    </p>
+
+    <.simple_form for={@form} id="answer-form" phx-change="validate" phx-submit="save">
+      <.input field={@form[:answer]} type="text" label="Answer" />
+      <:actions>
+        <.button phx-disable-with="Saving...">Send</.button>
+      </:actions>
+    </.simple_form>
+  <% else %>
+    <h1>Waiting for host...</h1>
+  <% end %>
+</div>

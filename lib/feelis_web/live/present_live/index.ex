@@ -49,7 +49,11 @@ defmodule FeelisWeb.PresentLive.Index do
   @impl true
   def handle_info(%{topic: @answers_topic, payload: _state}, socket) do
     slide = Presentations.get_slide!(socket.assigns.current_slide.id)
-    {:noreply, socket |> assign(:current_slide, slide)}
+
+    {:noreply,
+     socket
+     |> assign(:current_slide, slide)
+     |> push_event("add-answer", %{answers: Enum.map(slide.answers, fn a -> a.answer end)})}
   end
 
   @impl true

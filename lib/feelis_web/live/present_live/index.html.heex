@@ -1,19 +1,34 @@
-<.header>
-  <%= @presentation.title %>
-</.header>
+<header class="p-4 bg-gray-900 text-white">
+  <h1 class="text-lg font-bold text-center">
+    <%= @presentation.title %>
+  </h1>
+</header>
 
-<.button phx-click="previous_slide">Previous</.button>
-<.button phx-click="next_slide">Next</.button>
+<div class="p-4">
+  <div class="mb-8 text-center">
+    <h2 class="text-2xl font-bold">
+      <%= @current_slide.title %>
+    </h2>
 
-<h1>
-  <%= @current_slide.title %>
-</h1>
-<p>
-  <%= @current_slide.description %>
-</p>
+    <p class="mb-3">
+      <%= @current_slide.description %>
+    </p>
 
-<ul>
-  <%= for a <- @current_slide.answers do %>
-    <li><%= a.answer %></li>
-  <% end %>
-</ul>
+    <.button phx-click="previous_slide">Previous</.button>
+    <.button phx-click="next_slide">Next</.button>
+  </div>
+
+  <script>
+    const answers = [
+      <%= for a <- @current_slide.answers do %>
+        {word: "<%= a.answer %>", size: "20" },
+      <% end %>
+    ]
+  </script>
+</div>
+
+<script src="https://d3js.org/d3.v4.js">
+</script>
+<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js">
+</script>
+<div id="answers" phx-hook="drawWordCloud"></div>
