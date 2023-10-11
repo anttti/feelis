@@ -18,17 +18,11 @@
     <.button phx-click="next_slide">Next</.button>
   </div>
 
-  <script>
-    const answers = [
-      <%= for a <- @current_slide.answers do %>
-        {word: "<%= a.answer %>", size: "20" },
-      <% end %>
-    ]
-  </script>
+  <ul>
+    <%= for a <- @current_slide.answers do %>
+      <li><%= a.answer %></li>
+    <% end %>
+  </ul>
 </div>
 
-<script src="https://d3js.org/d3.v4.js">
-</script>
-<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js">
-</script>
 <div id="answers" phx-hook="drawWordCloud"></div>
